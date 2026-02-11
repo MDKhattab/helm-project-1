@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-postgres-service
+spec:
+  selector:
+    app: {{ .Values.servicename.database.selector }}
+  ports:
+    - protocol: {{ .Values.servicename.database.protocol }}
+      port: {{ .Values.servicename.database.port }}
+      targetPort: {{ .Values.servicename.database.targetPort }}
+  clusterIP: {{ .Values.servicename.database.clusterIP }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-backend-service
+spec:
+  selector:
+    app: {{ .Values.servicename.backend.selector }}
+  ports:
+    - protocol: {{ .Values.servicename.backend.protocol }}
+      port: {{ .Values.servicename.backend.port }}
+      targetPort: {{ .Values.servicename.backend.targetPort }}
+  type: {{ .Values.servicename.backend.type }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-frontend-service
+spec:
+  selector:
+    app: {{ .Values.servicename.frontend.selector }}
+  ports:
+    - protocol: {{ .Values.servicename.frontend.protocol }}
+      port: {{ .Values.servicename.frontend.port }}
+      targetPort: {{ .Values.servicename.frontend.targetPort }}
+  type: {{ .Values.servicename.frontend.type }}
+---

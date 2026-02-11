@@ -1,0 +1,82 @@
+replicaCount:
+  backend: 2
+  frontend: 2
+  database: 1
+
+servicename:
+  database:
+    selector: learning-platform-postgres
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+    clusterIP: None
+  backend:
+    selector: learning-platform-backend
+    protocol: TCP
+    port: 8000
+    targetPort: 8000
+    type: ClusterIP
+  frontend:
+    selector: learning-platform-frontend
+    protocol: TCP
+    port: 3000
+    targetPort: 80
+    type: ClusterIP
+
+imagePullSecret: regcred
+
+image:
+  backend:
+    repository: mokhattab/project
+    tag: backend
+    port: 8000
+  frontend:
+    repository: mokhattab/project
+    tag: frontendv1.0
+    port: 80
+  database:
+    repository: postgres
+    tag: 13
+    port: 5432
+
+resources:
+  backend:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  frontend:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+
+databaseconfig:
+  host: "learning-platform-postgres-service"
+  port: "5432"
+
+secretdata:
+  secretType: Opaque
+  dbname: bGVhcm5pbmdfcGxhdGZvcm0= # learning_platform
+  dbuser: YWRtaW4= # admin
+  dbpassword: YWRtaW4xMjM= # admin123
+
+storageClass:
+  provisioner: rancher.io/local-path
+  volumeBindingMode: WaitForFirstConsumer
+  reclaimPolicy: Delete
+  allowVolumeExpansion: true
+
+ingress:
+  rewriteTargetannotation: /
+  host: learning-platform.local
+  frontendPath: /
+  frontendpathType: Prefix
+  apiPath: /api
+  apipathType: Prefix
+
+pvcsize: 5Gi

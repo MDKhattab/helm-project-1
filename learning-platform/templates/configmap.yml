@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-backend-config
+data:
+  DB_HOST: "{{ .Values.databaseconfig.host }}"
+  DB_PORT: "{{ .Values.databaseconfig.port }}"
+
+---
+
